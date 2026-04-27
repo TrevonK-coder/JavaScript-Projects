@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Project 1 – JavaScript Expressions and Alert Demo" />
+    <title>Project 1 – JS Expressions &amp; Alert</title>
+
+    <!-- Google Font -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      /* ── Reset & base ── */
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+      body {
+        font-family: 'Inter', sans-serif;
+        background: #0f0f1a;
+        color: #e2e8f0;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 2rem 1rem 4rem;
+      }
+
+      /* ── Header ── */
+      header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+      }
+      header h1 {
+        font-size: clamp(1.6rem, 4vw, 2.4rem);
+        font-weight: 700;
+        background: linear-gradient(135deg, #818cf8, #34d399);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      header p {
+        margin-top: .5rem;
+        color: #94a3b8;
+        font-size: .95rem;
+      }
+
+      /* ── Card grid ── */
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.4rem;
+        width: 100%;
+        max-width: 960px;
+      }
+
+      .card {
+        background: rgba(255,255,255,.05);
+        border: 1px solid rgba(255,255,255,.1);
+        border-radius: 1rem;
+        padding: 1.5rem;
+        backdrop-filter: blur(8px);
+        transition: transform .2s, box-shadow .2s;
+      }
+      .card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 30px rgba(129,140,248,.2);
+      }
+      .card h2 {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #818cf8;
+        margin-bottom: .8rem;
+        text-transform: uppercase;
+        letter-spacing: .06em;
+      }
+      .card p, .card .output {
+        font-size: .95rem;
+        color: #cbd5e1;
+        line-height: 1.6;
+      }
+
+      /* ── Output box from document.write() ── */
+      #doc-write-output {
+        background: #1e1e2e;
+        border-left: 3px solid #34d399;
+        border-radius: .5rem;
+        padding: 1rem;
+        font-family: monospace;
+        font-size: .9rem;
+        color: #a6e3a1;
+        white-space: pre-wrap;
+        word-break: break-word;
+        min-height: 60px;
+      }
+
+      /* ── Expression table ── */
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: .9rem;
+      }
+      th {
+        text-align: left;
+        color: #818cf8;
+        padding: .4rem .6rem;
+        border-bottom: 1px solid rgba(255,255,255,.1);
+      }
+      td {
+        padding: .45rem .6rem;
+        color: #cbd5e1;
+        border-bottom: 1px solid rgba(255,255,255,.05);
+      }
+      td:last-child { color: #34d399; font-family: monospace; }
+
+      /* ── Interactive calculator ── */
+      .calc-row {
+        display: flex;
+        gap: .6rem;
+        flex-wrap: wrap;
+        margin-bottom: .8rem;
+      }
+      .calc-row input {
+        flex: 1;
+        min-width: 80px;
+        background: #1e1e2e;
+        border: 1px solid rgba(255,255,255,.15);
+        border-radius: .5rem;
+        color: #e2e8f0;
+        padding: .5rem .8rem;
+        font-size: .95rem;
+        outline: none;
+        transition: border-color .2s;
+      }
+      .calc-row input:focus { border-color: #818cf8; }
+      .calc-row select {
+        background: #1e1e2e;
+        border: 1px solid rgba(255,255,255,.15);
+        border-radius: .5rem;
+        color: #e2e8f0;
+        padding: .5rem .6rem;
+        font-size: .95rem;
+        outline: none;
+      }
+      button {
+        background: linear-gradient(135deg, #818cf8, #6366f1);
+        border: none;
+        border-radius: .5rem;
+        color: #fff;
+        padding: .55rem 1.2rem;
+        font-size: .95rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: opacity .2s, transform .1s;
+      }
+      button:hover { opacity: .88; }
+      button:active { transform: scale(.97); }
+
+      #calc-result {
+        font-family: monospace;
+        font-size: 1.05rem;
+        color: #34d399;
+        min-height: 1.4em;
+      }
+
+      /* ── String builder ── */
+      .str-row { display: flex; gap: .6rem; margin-bottom: .8rem; flex-wrap: wrap; }
+      .str-row input {
+        flex: 1;
+        background: #1e1e2e;
+        border: 1px solid rgba(255,255,255,.15);
+        border-radius: .5rem;
+        color: #e2e8f0;
+        padding: .5rem .8rem;
+        font-size: .95rem;
+        outline: none;
+        transition: border-color .2s;
+      }
+      .str-row input:focus { border-color: #34d399; }
+      #string-result {
+        font-family: monospace;
+        font-size: .95rem;
+        color: #f9a8d4;
+        word-break: break-word;
+        min-height: 1.4em;
+      }
+
+      /* ── Footer ── */
+      footer {
+        margin-top: 3rem;
+        color: #475569;
+        font-size: .8rem;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+
+    <header>
+      <h1>Project 1 — JS Expressions &amp; Alert</h1>
+      <p>Variables · Concatenation · Expressions · <code>document.write()</code> · <code>window.alert()</code></p>
+    </header>
+
+    <div class="grid">
+
+      <!-- Card 1: document.write() output -->
+      <div class="card">
+        <h2>📄 document.write() Output</h2>
+        <div id="doc-write-output"></div>
+      </div>
+
+      <!-- Card 2: Expression table -->
+      <div class="card">
+        <h2>🔢 Expression Results</h2>
+        <table id="expr-table">
+          <thead>
+            <tr><th>Expression</th><th>Result</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <!-- Card 3: Live Expression Calculator -->
+      <div class="card">
+        <h2>🧮 Live Calculator</h2>
+        <p style="margin-bottom:.9rem;color:#94a3b8;font-size:.85rem;">
+          Enter two numbers and an operator — result updates instantly.
+        </p>
+        <div class="calc-row">
+          <input type="number" id="num1" placeholder="e.g. 12" value="12" />
+          <select id="operator">
+            <option>+</option><option>-</option>
+            <option>*</option><option>/</option><option>%</option>
+          </select>
+          <input type="number" id="num2" placeholder="e.g. 4" value="4" />
+        </div>
+        <div id="calc-result">Result: —</div>
+      </div>
+
+      <!-- Card 4: String Builder -->
+      <div class="card">
+        <h2>🔗 String Concatenation Builder</h2>
+        <p style="margin-bottom:.9rem;color:#94a3b8;font-size:.85rem;">
+          Edit either field — they concatenate in real time.
+        </p>
+        <div class="str-row">
+          <input type="text" id="str1" value="This is the beginning of the string" />
+        </div>
+        <div class="str-row">
+          <input type="text" id="str2" value=" and this is the end of the string" />
+        </div>
+        <div id="string-result"></div>
+      </div>
+
+    </div>
+
+    <footer>
+      JavaScript-Projects · Project 1 · Basic JS Expressions &amp; Alert
+    </footer>
+
+    <!--
+      The script element uses the src attribute to link to main.js.
+      Placed at the bottom so the DOM is fully loaded before the script runs.
+    -->
+    <script src="main.js"></script>
+
+  </body>
+</html>
