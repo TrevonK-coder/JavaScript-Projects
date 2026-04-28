@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Project 2 – JavaScript Functions Demo with interactive examples" />
+    <title>Project 2 – JavaScript Functions</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+    <style>
+      /* ── Reset & base ───────────────────────────── */
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+      :root {
+        --bg:        #0b0b18;
+        --surface:   rgba(255,255,255,.05);
+        --border:    rgba(255,255,255,.1);
+        --purple:    #818cf8;
+        --green:     #34d399;
+        --pink:      #f472b6;
+        --yellow:    #fbbf24;
+        --text:      #e2e8f0;
+        --muted:     #94a3b8;
+        --radius:    1rem;
+      }
+
+      body {
+        font-family: 'Inter', sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+        padding: 2rem 1rem 5rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      /* ── Header ─────────────────────────────────── */
+      header { text-align: center; margin-bottom: 2.8rem; }
+
+      header h1 {
+        font-size: clamp(1.7rem, 4vw, 2.5rem);
+        font-weight: 700;
+        background: linear-gradient(135deg, var(--purple), var(--green));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      header p { margin-top: .5rem; color: var(--muted); font-size: .95rem; }
+
+      /* ── Badge pill ──────────────────────────────── */
+      .badge {
+        display: inline-block;
+        background: rgba(129,140,248,.15);
+        border: 1px solid var(--purple);
+        color: var(--purple);
+        border-radius: 999px;
+        font-size: .72rem;
+        font-weight: 600;
+        padding: .18rem .7rem;
+        letter-spacing: .05em;
+        text-transform: uppercase;
+        margin-bottom: .7rem;
+      }
+
+      /* ── Section layout ──────────────────────────── */
+      .section {
+        width: 100%;
+        max-width: 960px;
+        margin-bottom: 2rem;
+      }
+      .section-title {
+        font-size: .75rem;
+        font-weight: 600;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: .1em;
+        margin-bottom: 1rem;
+        padding-left: .2rem;
+      }
+
+      .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.2rem; }
+      .grid-1 { display: grid; grid-template-columns: 1fr; gap: 1.2rem; }
+
+      /* ── Card ────────────────────────────────────── */
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 1.6rem;
+        backdrop-filter: blur(10px);
+        transition: transform .2s, box-shadow .2s;
+      }
+      .card:hover { transform: translateY(-3px); box-shadow: 0 10px 40px rgba(129,140,248,.15); }
+
+      .card h2 {
+        font-size: .85rem;
+        font-weight: 600;
+        color: var(--purple);
+        text-transform: uppercase;
+        letter-spacing: .07em;
+        margin-bottom: 1rem;
+      }
+      .card h2.green  { color: var(--green); }
+      .card h2.pink   { color: var(--pink); }
+      .card h2.yellow { color: var(--yellow); }
+
+      /* ── Inputs & selects ────────────────────────── */
+      input[type="text"],
+      input[type="number"],
+      select {
+        width: 100%;
+        background: #1a1a2e;
+        border: 1px solid var(--border);
+        border-radius: .5rem;
+        color: var(--text);
+        padding: .55rem .8rem;
+        font-size: .9rem;
+        font-family: inherit;
+        outline: none;
+        transition: border-color .2s;
+        margin-bottom: .7rem;
+      }
+      input:focus, select:focus { border-color: var(--purple); }
+
+      label { display: block; font-size: .8rem; color: var(--muted); margin-bottom: .3rem; }
+
+      /* ── Buttons ─────────────────────────────────── */
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: .4rem;
+        background: linear-gradient(135deg, var(--purple), #6366f1);
+        border: none;
+        border-radius: .5rem;
+        color: #fff;
+        padding: .55rem 1.2rem;
+        font-size: .9rem;
+        font-weight: 600;
+        font-family: inherit;
+        cursor: pointer;
+        transition: opacity .2s, transform .1s;
+        margin-top: .3rem;
+      }
+      .btn:hover { opacity: .85; }
+      .btn:active { transform: scale(.97); }
+      .btn.green  { background: linear-gradient(135deg, #34d399, #059669); }
+      .btn.pink   { background: linear-gradient(135deg, #f472b6, #db2777); }
+      .btn.yellow { background: linear-gradient(135deg, #fbbf24, #d97706); color: #000; }
+      .btn.ghost  {
+        background: transparent;
+        border: 1px solid var(--border);
+        color: var(--muted);
+      }
+      .btn.ghost:hover { border-color: var(--purple); color: var(--purple); }
+      .btn-row { display: flex; gap: .6rem; flex-wrap: wrap; margin-top: .6rem; }
+
+      /* ── Output boxes ────────────────────────────── */
+      .output {
+        background: #12122a;
+        border-left: 3px solid var(--purple);
+        border-radius: .5rem;
+        padding: .9rem 1rem;
+        font-family: 'Courier New', monospace;
+        font-size: .88rem;
+        color: #a5b4fc;
+        margin-top: .9rem;
+        min-height: 2.2rem;
+        white-space: pre-wrap;
+        word-break: break-word;
+        line-height: 1.55;
+      }
+      .output.green  { border-left-color: var(--green);  color: #6ee7b7; }
+      .output.pink   { border-left-color: var(--pink);   color: #f9a8d4; }
+      .output.yellow { border-left-color: var(--yellow); color: #fde68a; }
+
+      /* ── Score counter ───────────────────────────── */
+      .score-display {
+        font-size: 3rem;
+        font-weight: 700;
+        text-align: center;
+        background: linear-gradient(135deg, var(--green), var(--purple));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin: .5rem 0 1rem;
+        transition: transform .15s;
+      }
+      .score-display.bump { transform: scale(1.18); }
+
+      /* ── Shopping cart table ─────────────────────── */
+      table { width: 100%; border-collapse: collapse; font-size: .88rem; }
+      th { color: var(--muted); text-align: left; padding: .4rem .5rem; border-bottom: 1px solid var(--border); }
+      td { padding: .45rem .5rem; border-bottom: 1px solid rgba(255,255,255,.04); }
+      td:last-child { color: var(--green); font-family: monospace; }
+      .total-row td { color: var(--yellow); font-weight: 600; border-top: 1px solid var(--border); }
+
+      /* ── Multiplication grid ─────────────────────── */
+      #mult-output {
+        display: grid;
+        gap: .3rem;
+        margin-top: .9rem;
+        font-family: monospace;
+        font-size: .82rem;
+      }
+      .mult-row { display: flex; gap: .3rem; }
+      .mult-cell {
+        width: 40px; height: 28px;
+        display: flex; align-items: center; justify-content: center;
+        border-radius: .3rem;
+        font-size: .75rem;
+        transition: background .2s;
+      }
+      .mult-cell.header { background: rgba(129,140,248,.2); color: var(--purple); font-weight: 600; }
+      .mult-cell.body   { background: rgba(255,255,255,.04); color: var(--text); }
+      .mult-cell.body:hover { background: rgba(52,211,153,.15); color: var(--green); }
+
+      /* ── Footer ──────────────────────────────────── */
+      footer { margin-top: 3rem; color: #334155; font-size: .78rem; text-align: center; }
+    </style>
+  </head>
+  <body>
+
+    <header>
+      <div class="badge">Project 2</div>
+      <h1>JavaScript Functions</h1>
+      <p>Functions · <code>+=</code> Operator · DOM Interaction · Events</p>
+    </header>
+
+    <!-- ═══════════════════════════════════════════
+         SECTION A – Score Counter  (uses +=)
+    ════════════════════════════════════════════ -->
+    <div class="section">
+      <p class="section-title">A — Score Counter using +=</p>
+      <div class="grid-2">
+
+        <div class="card">
+          <h2>🎮 Score Tracker</h2>
+          <p style="color:var(--muted);font-size:.85rem;margin-bottom:.8rem;">
+            Each button calls <code>addScore(points)</code>, which uses <strong>+=</strong>
+            to accumulate the total.
+          </p>
+
+          <!-- HTML elements that call and display the function -->
+          <div id="score-display" class="score-display">0</div>
+
+          <div class="btn-row">
+            <!--
+              onclick calls addScore() with a point value.
+              The function uses += to add to the running total.
+            -->
+            <button class="btn green"  onclick="addScore(1)">+1 pt</button>
+            <button class="btn yellow" onclick="addScore(5)">+5 pts</button>
+            <button class="btn pink"   onclick="addScore(10)">+10 pts</button>
+            <button class="btn ghost"  onclick="resetScore()">Reset</button>
+          </div>
+          <div id="score-log" class="output green"></div>
+        </div>
+
+        <!-- ── Sentence Builder (+=) ── -->
+        <div class="card">
+          <h2 class="green">✏️ Sentence Builder</h2>
+          <p style="color:var(--muted);font-size:.85rem;margin-bottom:.8rem;">
+            <code>buildSentence()</code> uses <strong>+=</strong> to grow a string
+            word-by-word from an array.
+          </p>
+
+          <label for="word-input">Add a word</label>
+          <input type="text" id="word-input" placeholder="Type a word and click Add…" />
+
+          <div class="btn-row">
+            <!--
+              onclick calls buildSentence() which appends the word
+              to a string variable using the += operator.
+            -->
+            <button class="btn green" onclick="addWord()">➕ Add Word</button>
+            <button class="btn ghost" onclick="clearSentence()">Clear</button>
+          </div>
+          <div id="sentence-output" class="output green"></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════
+         SECTION B – Shopping Cart  (+=)
+    ════════════════════════════════════════════ -->
+    <div class="section">
+      <p class="section-title">B — Shopping Cart  (total built with +=)</p>
+      <div class="grid-1">
+        <div class="card">
+          <h2 class="pink">🛒 Shopping Cart</h2>
+          <p style="color:var(--muted);font-size:.85rem;margin-bottom:1rem;">
+            <code>addItem()</code> logs items and uses <strong>+=</strong> to accumulate
+            the running total price.
+          </p>
+
+          <div style="display:flex;gap:.7rem;flex-wrap:wrap;">
+            <div style="flex:1;min-width:180px;">
+              <label for="item-name">Item name</label>
+              <input type="text"   id="item-name"  placeholder="e.g. Headphones" />
+            </div>
+            <div style="flex:1;min-width:140px;">
+              <label for="item-price">Price ($)</label>
+              <input type="number" id="item-price" placeholder="e.g. 49.99" step="0.01" min="0" />
+            </div>
+          </div>
+
+          <!--
+            onclick triggers addItem() — an HTML element calling a JS function
+            that uses += to build the cart total.
+          -->
+          <button class="btn pink" onclick="addItem()" style="margin-top:.4rem;">
+            Add to Cart
+          </button>
+
+          <table id="cart-table" style="margin-top:1rem;">
+            <thead>
+              <tr><th>#</th><th>Item</th><th>Price</th></tr>
+            </thead>
+            <tbody id="cart-body"></tbody>
+            <tfoot>
+              <tr class="total-row">
+                <td colspan="2">Total</td>
+                <td id="cart-total">$0.00</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════
+         SECTION C – Multiplication Table  (+=)
+    ════════════════════════════════════════════ -->
+    <div class="section">
+      <p class="section-title">C — Multiplication Table (HTML built with +=)</p>
+      <div class="grid-1">
+        <div class="card">
+          <h2 class="yellow">✖️ Multiplication Table Generator</h2>
+          <p style="color:var(--muted);font-size:.85rem;margin-bottom:1rem;">
+            <code>buildTable(n)</code> uses <strong>+=</strong> to assemble an HTML
+            string in a loop, then injects it into the page.
+          </p>
+
+          <label for="table-size">Table size (2 – 12)</label>
+          <input type="number" id="table-size" value="5" min="2" max="12" style="max-width:120px;" />
+
+          <!--
+            This button calls buildTable() — an HTML element that triggers a
+            JavaScript function using the += operator to build markup.
+          -->
+          <button class="btn yellow" onclick="buildTable()" style="display:block;margin-top:.4rem;">
+            Generate Table
+          </button>
+
+          <div id="mult-output"></div>
+        </div>
+      </div>
+    </div>
+
+    <footer>JavaScript-Projects &nbsp;·&nbsp; Project 2 &nbsp;·&nbsp; Functions &amp; += Operator</footer>
+
+    <!--
+      script element with src attribute links to the external main.js file.
+      Placed at the bottom of <body> so the DOM is ready before the script runs.
+    -->
+    <script src="main.js"></script>
+
+  </body>
+</html>
