@@ -1,6 +1,8 @@
 # JavaScript-Projects
 
-A collection of beginner JavaScript projects created as part of a web development course. Each project lives in its own folder inside **Basic JavaScript Projects** and demonstrates a specific set of core JavaScript concepts.
+A collection of JavaScript projects created as part of a web development course. Each project demonstrates core JavaScript concepts with interactive, visually polished UIs.
+
+🔗 **Live Portfolio:** [trevonk-coder.github.io/myCV](https://trevonk-coder.github.io/myCV/)
 
 ---
 
@@ -62,11 +64,30 @@ An interactive multi-section page that demonstrates JavaScript functions, the `+
 
 ---
 
+## 🗂️ Related Projects (Other Repos)
+
+### One-Page Website — Lightbox Modal Gallery
+**Repo:** [`HTML-and-CSS-Projects`](https://github.com/TrevonK-coder/HTML-and-CSS-Projects)
+**Folder:** `One-Page Website/`
+
+A single-page website upgraded with a fully functional JavaScript lightbox modal gallery.
+
+**JavaScript concepts covered:**
+- `openLightbox(index)`, `closeLightbox()`, `navigate(direction)`, `loadImage(index)` — four coordinated functions
+- `Array.from(querySelectorAll(...))` — building an image array from the DOM
+- `classList.add("open")` / `classList.remove("open")` — toggling modal visibility
+- `document.body.style.overflow` — locking scroll while modal is open
+- `addEventListener("keydown", ...)` — keyboard navigation (← → Esc)
+- Backdrop click-to-close via `event.target` check
+- CSS `@keyframes` animations triggered by JS class changes
+
+---
+
 ## 🛠️ Technologies Used
 
 - HTML5
-- Vanilla CSS (glassmorphism, CSS custom properties, responsive grid)
-- Vanilla JavaScript (ES5 compatible)
+- Vanilla CSS (glassmorphism, CSS custom properties, responsive grid, animations)
+- Vanilla JavaScript (ES5/ES6 compatible)
 - Google Fonts — Inter
 
 ---
